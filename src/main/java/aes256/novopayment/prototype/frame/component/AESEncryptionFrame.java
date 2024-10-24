@@ -25,11 +25,12 @@ public class AESEncryptionFrame {
   private IClientManager iClientManager;
 
 
-  public AESEncryptionFrame(IDecrypt iDecrypt, IEncrypt iEncrypt) {
+  public AESEncryptionFrame(IDecrypt iDecrypt, IEncrypt iEncrypt) throws IOException {
     super();
     this.iDecrypt = iDecrypt;
     this.iEncrypt = iEncrypt;
     this.iClientManager = new ClientManager();
+    this.iClientManager.cargarClientes();
   }
 
   public void doOnStart() throws Exception {
@@ -144,7 +145,7 @@ public class AESEncryptionFrame {
 
       // Crear el JComboBox para seleccionar un cliente
       JComboBox<String> comboBoxKeys = new JComboBox<>(keysNames);
-      int seleccionKey = JOptionPane.showConfirmDialog(null, comboBoxKeys, "Selecciona un cliente", JOptionPane.OK_CANCEL_OPTION);
+      int seleccionKey = JOptionPane.showConfirmDialog(null, comboBoxKeys, "Selecciona un key", JOptionPane.OK_CANCEL_OPTION);
       if (seleccionKey == JOptionPane.OK_OPTION) {
         keyName = (String) comboBoxKeys.getSelectedItem();
         Optional<Llave> optionalKey = optionalClient.get().getLlaves().stream()
