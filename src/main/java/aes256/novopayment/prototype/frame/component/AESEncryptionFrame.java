@@ -186,35 +186,45 @@ public class AESEncryptionFrame {
 
   // Método para agregar o actualizar una llave para un cliente
   private void agregarOActualizarLlave() {
-    String nombreCliente = JOptionPane.showInputDialog("Ingresa el nombre del cliente:");
+    String cliente;
+    String[] nombresClientes = this.iClientManager.doOnGetClients().stream()
+            .map(Cliente::getNombre) // Obtener los nombres de los clientes
+            .toArray(String[]::new); // Convertir a un array
 
-    if (nombreCliente == null || nombreCliente.isEmpty()) {
-      JOptionPane.showMessageDialog(null, "El nombre del cliente no puede estar vacío.");
-      return;
+    // Crear el JComboBox para seleccionar un cliente
+    JComboBox<String> comboBoxClients = new JComboBox<>(nombresClientes);
+    int seleccionClient = JOptionPane.showConfirmDialog(null, comboBoxClients, "Selecciona un cliente", JOptionPane.OK_CANCEL_OPTION);
+
+    if (seleccionClient == JOptionPane.OK_OPTION) {
+      cliente = (String) comboBoxClients.getSelectedItem();
+      Optional<Cliente> optionalClient = this.iClientManager.doOnGetClients().stream()
+              .filter(c -> c.getNombre().equals(cliente)) // Comparar el nombre
+              .findFirst();
+      String nombreLlave = JOptionPane.showInputDialog("Ingresa el nombre de la llave:");
+
+      if (nombreLlave == null || nombreLlave.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "El nombre de la llave no puede estar vacío.");
+        return;
+      }
+
+      String valorLlave = JOptionPane.showInputDialog("Ingresa el valor de la llave:");
+
+      if (valorLlave == null || valorLlave.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "El valor de la llave no puede estar vacío.");
+        return;
+      }
+
+      try {
+        // Agregar o actualizar la llave
+        Llave nuevaLlave = new Llave(nombreLlave, valorLlave);
+        this.iClientManager.doOnSaveOrUpdateKey(optionalClient.get().getNombre(), nuevaLlave);
+        JOptionPane.showMessageDialog(null, "Llave agregada/actualizada exitosamente.");
+      } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error al agregar/actualizar la llave: " + e.getMessage());
+      }
     }
 
-    String nombreLlave = JOptionPane.showInputDialog("Ingresa el nombre de la llave:");
 
-    if (nombreLlave == null || nombreLlave.isEmpty()) {
-      JOptionPane.showMessageDialog(null, "El nombre de la llave no puede estar vacío.");
-      return;
-    }
-
-    String valorLlave = JOptionPane.showInputDialog("Ingresa el valor de la llave:");
-
-    if (valorLlave == null || valorLlave.isEmpty()) {
-      JOptionPane.showMessageDialog(null, "El valor de la llave no puede estar vacío.");
-      return;
-    }
-
-    try {
-      // Agregar o actualizar la llave
-      Llave nuevaLlave = new Llave(nombreLlave, valorLlave);
-      this.iClientManager.doOnSaveOrUpdateKey(nombreCliente, nuevaLlave);
-      JOptionPane.showMessageDialog(null, "Llave agregada/actualizada exitosamente.");
-    } catch (IOException e) {
-      JOptionPane.showMessageDialog(null, "Error al agregar/actualizar la llave: " + e.getMessage());
-    }
   }
 
   // Método para listar todos los clientes y sus llaves

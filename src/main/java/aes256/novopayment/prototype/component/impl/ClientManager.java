@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import aes256.novopayment.prototype.model.Cliente;
 import aes256.novopayment.prototype.model.Llave;
 
-public class ClientManager  implements IClientManager{
+public class ClientManager implements IClientManager {
 
   private static final String FILE_PATH = "client_keys.json";
   private ObjectMapper objectMapper = new ObjectMapper();
@@ -65,7 +65,16 @@ public class ClientManager  implements IClientManager{
 
   // Método para guardar clientes
   private void doOnWriteFile(List<Cliente> clientes) throws IOException {
-    objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), clientes);
+    File file = new File(FILE_PATH);
+    try {
+      if (!file.exists()) {
+        file.createNewFile(); // Crea el archivo si no existe
+      }
+      // Escribe el objeto en el archivo
+      objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, clientes);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -91,7 +100,7 @@ public class ClientManager  implements IClientManager{
   }
 
   @Override
-  public List<Cliente> doOnGetClients(){
+  public List<Cliente> doOnGetClients() {
     return this.clientes;
   }
 }
