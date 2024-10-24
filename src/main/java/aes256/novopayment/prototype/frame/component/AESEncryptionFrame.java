@@ -33,11 +33,20 @@ public class AESEncryptionFrame {
   }
 
   public void doOnStart() throws Exception {
-    JFrame ventana = new JFrame("Menú de Encriptación / Desencriptación AES256");
-    ventana.setSize(450, 300);
+    JFrame ventana = new JFrame("AES256 Encryption / Decryption");
+    ventana.setSize(480, 400);
     ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     ventana.setLayout(null);
-    this.iClientManager.cargarClientes();
+    ventana.setLocationRelativeTo(null); // Center window
+
+    // Estilo inspirado en Ubuntu
+    Color backgroundColor = new Color(48, 10, 36); // Dark background
+    Color buttonColor = new Color(255, 87, 34);    // Ubuntu orange
+    Color textColor = Color.WHITE;
+    Font ubuntuFont = new Font("Ubuntu", Font.PLAIN, 14); // Ubuntu font
+
+    ventana.getContentPane().setBackground(backgroundColor);
+
     JLabel menuLabel = new JLabel("<html>"
             + "|------------------ Menu ------------------|<br>"
             + "| 1. Encrypt text                          <br>"
@@ -47,72 +56,70 @@ public class AESEncryptionFrame {
             + "| 5. List Clients                          <br>"
             + "| 6. Exit                                  <br>"
             + "|------------------------------------------|</html>");
-
-    menuLabel.setBounds(50, 10, 300, 100);
+    menuLabel.setBounds(50, 10, 380, 120);
+    menuLabel.setForeground(textColor);
+    menuLabel.setFont(ubuntuFont);
     ventana.add(menuLabel);
-    int buttonWidth = 120;
-    int buttonHeight = 30;
 
-    // Botones para opciones
-    JButton btnEncrypt = new JButton("Encrypt");
-    btnEncrypt.setBounds(20, 150, buttonWidth, buttonHeight);
-    btnEncrypt.setToolTipText("Encrypt"); // Título al pasar el mouse
+    // Botones con estilo Ubuntu
+    int buttonWidth = 150;
+    int buttonHeight = 40;
+    JButton btnEncrypt = createUbuntuButton("Encrypt", buttonColor, textColor, ubuntuFont);
+    btnEncrypt.setBounds(40, 150, buttonWidth, buttonHeight);
+
+    JButton btnDecrypt = createUbuntuButton("Decrypt", buttonColor, textColor, ubuntuFont);
+    btnDecrypt.setBounds(250, 150, buttonWidth, buttonHeight);
+
+    JButton btnAddClient = createUbuntuButton("Add Client", buttonColor, textColor, ubuntuFont);
+    btnAddClient.setBounds(40, 210, buttonWidth, buttonHeight);
+
+    JButton btnAddKey = createUbuntuButton("Add/Update Key", buttonColor, textColor, ubuntuFont);
+    btnAddKey.setBounds(250, 210, buttonWidth, buttonHeight);
+
+    JButton btnListClients = createUbuntuButton("List Clients", buttonColor, textColor, ubuntuFont);
+    btnListClients.setBounds(40, 270, buttonWidth, buttonHeight);
+
+    JButton btnExit = createUbuntuButton("Exit", buttonColor, textColor, ubuntuFont);
+    btnExit.setBounds(250, 270, buttonWidth, buttonHeight);
+
+    // Añadir los botones a la ventana
     ventana.add(btnEncrypt);
-
-    JButton btnDecrypt = new JButton("Decrypt");
-    btnDecrypt.setBounds(150, 150, buttonWidth, buttonHeight);
-    btnDecrypt.setToolTipText("Decrypt"); // Título al pasar el mouse
     ventana.add(btnDecrypt);
-
-    JButton btnAddClient = new JButton("Add Client");
-    btnAddClient.setBounds(280, 150, buttonWidth, buttonHeight);
-    btnAddClient.setToolTipText("Add Client"); // Título al pasar el mouse
     ventana.add(btnAddClient);
-
-    JButton btnAddKey = new JButton("Add/Update key");
-    btnAddKey.setBounds(20, 200, buttonWidth, buttonHeight);
-    btnAddKey.setToolTipText("Add/Update key"); // Título al pasar el mouse
     ventana.add(btnAddKey);
-
-    JButton btnListClients = new JButton("List Clients");
-    btnListClients.setBounds(150, 200, buttonWidth, buttonHeight);
-    btnListClients.setToolTipText("List Clients"); // Título al pasar el mouse
     ventana.add(btnListClients);
-
-    JButton btnExit = new JButton("Exit");
-    btnExit.setBounds(280, 200, buttonWidth, buttonHeight); // Centrado
-    btnExit.setToolTipText("EXIT"); // Título al pasar el mouse
     ventana.add(btnExit);
 
     // Eventos para los botones
-    btnEncrypt.addActionListener(e -> {
-      try {
-        doOnBusinessAes256(Constants.BUSSINES_ENCRYPT);
-      } catch (Exception ex) {
-        throw new RuntimeException(ex);
-      }
-    });
-
-    btnDecrypt.addActionListener(e -> {
-      try {
-        doOnBusinessAes256(Constants.BUSSINES_DECRYPT);
-      } catch (Exception ex) {
-        throw new RuntimeException(ex);
-      }
-    });
-
+    btnEncrypt.addActionListener(e -> performOperation(Constants.BUSSINES_ENCRYPT));
+    btnDecrypt.addActionListener(e -> performOperation(Constants.BUSSINES_DECRYPT));
     btnAddClient.addActionListener(e -> agregarCliente());
-
     btnAddKey.addActionListener(e -> agregarOActualizarLlave());
-
     btnListClients.addActionListener(e -> listarClientes());
-
     btnExit.addActionListener(e -> {
-      JOptionPane.showMessageDialog(ventana, "Saliendo del programa...");
+      JOptionPane.showMessageDialog(ventana, "Exiting...");
       System.exit(0);
     });
-    ventana.setLocationRelativeTo(null);
-    ventana.setVisible(true); // Mostrar la ventana
+
+    ventana.setVisible(true);
+  }
+
+  private JButton createUbuntuButton(String text, Color bgColor, Color textColor, Font font) {
+    JButton button = new JButton(text);
+    button.setBackground(bgColor);
+    button.setForeground(textColor);
+    button.setFont(font);
+    button.setFocusPainted(false); // Remove focus border
+    button.setBorderPainted(false); // Remove button border
+    return button;
+  }
+
+  private void performOperation(int operation) {
+    try {
+      doOnBusinessAes256(operation);
+    } catch (Exception ex) {
+      JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+    }
   }
 
   // Método para manejar la encriptación o desencriptación
