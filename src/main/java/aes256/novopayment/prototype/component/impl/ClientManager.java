@@ -3,40 +3,39 @@ package aes256.novopayment.prototype.component.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import aes256.novopayment.prototype.component.IClientManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 
 import aes256.novopayment.prototype.model.Cliente;
 import aes256.novopayment.prototype.model.Llave;
 
-public class ClientKeyManager {
+public class ClientManager  implements IClientManager{
 
   private static final String FILE_PATH = "client_keys.json";
   private ObjectMapper objectMapper = new ObjectMapper();
 
   public List<Cliente> clientes = new ArrayList<>();
 
-  public ClientKeyManager() {
+  public ClientManager() {
   }
 
   // Método para agregar un nuevo cliente
-  public boolean agregarCliente(Cliente nuevoCliente) throws IOException {
+  public boolean doOnAddCliente(Cliente nuevoCliente) throws IOException {
     if (!this.clientes.contains(nuevoCliente)) {
       this.clientes.add(nuevoCliente);
-      guardarClientes(clientes);
+      doOnWriteFile(clientes);
       return true;
     }
     return false;
   }
 
+  @Override
   // Método para agregar o actualizar una llave para un cliente
-  public void agregarOActualizarLlave(String nombreCliente, Llave nuevaLlave) throws IOException {
+  public void doOnSaveOrUpdateKey(String nombreCliente, Llave nuevaLlave) throws IOException {
     List<Cliente> clientesExistentes = cargarClientes();
 
     // Buscar cliente
@@ -58,17 +57,18 @@ public class ClientKeyManager {
       }
 
       // Guardar los cambios
-      guardarClientes(clientesExistentes);
+      doOnWriteFile(clientesExistentes);
     } else {
       System.out.println("Cliente no encontrado.");
     }
   }
 
   // Método para guardar clientes
-  public void guardarClientes(List<Cliente> clientes) throws IOException {
+  private void doOnWriteFile(List<Cliente> clientes) throws IOException {
     objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), clientes);
   }
 
+  @Override
   // Método para cargar clientes
   public List<Cliente> cargarClientes() throws IOException {
     File file = new File(FILE_PATH);
@@ -88,5 +88,10 @@ public class ClientKeyManager {
     }));
 
     return clientes;
+  }
+
+  @Override
+  public List<Cliente> doOnGetClients(){
+    return this.clientes;
   }
 }

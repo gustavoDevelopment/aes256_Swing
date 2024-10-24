@@ -1,13 +1,14 @@
 aes256\novopayment\prototype\component\IEncrypt.class
-aes256\novopayment\prototype\component\impl\ClientKeyManager.class
 aes256\novopayment\prototype\constants\Constants.class
 aes256\novopayment\prototype\model\Cliente.class
+aes256\novopayment\prototype\component\impl\ClientManager.class
 aes256\novopayment\prototype\component\IDecrypt.class
 aes256\novopayment\prototype\frame\component\AESEncryptionFrame.class
 aes256\novopayment\prototype\model\Llave.class
-aes256\novopayment\prototype\component\impl\ClientKeyManager$1.class
+aes256\novopayment\prototype\component\impl\ClientManager$1.class
 aes256\novopayment\prototype\App.class
 aes256\novopayment\prototype\component\impl\Decyrpt.class
 aes256\novopayment\prototype\model\Cliente$ClienteBuilder.class
 aes256\novopayment\prototype\model\Llave$LlaveBuilder.class
+aes256\novopayment\prototype\component\IClientManager.class
 aes256\novopayment\prototype\component\impl\Encyrpt.class

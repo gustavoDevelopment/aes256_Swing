@@ -1,15 +1,16 @@
 package aes256.novopayment.prototype.frame.component;
 
+import aes256.novopayment.prototype.component.IClientManager;
 import aes256.novopayment.prototype.component.IDecrypt;
 import aes256.novopayment.prototype.component.IEncrypt;
-import aes256.novopayment.prototype.component.impl.ClientKeyManager;
+import aes256.novopayment.prototype.component.impl.ClientManager;
+import aes256.novopayment.prototype.constants.Constants;
 import aes256.novopayment.prototype.model.Cliente;
 import aes256.novopayment.prototype.model.Llave;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,76 +22,72 @@ public class AESEncryptionFrame {
 
   private IDecrypt iDecrypt;
   private IEncrypt iEncrypt;
-  private ClientKeyManager clientKeyManager;
+  private IClientManager iClientManager;
 
 
   public AESEncryptionFrame(IDecrypt iDecrypt, IEncrypt iEncrypt) {
     super();
     this.iDecrypt = iDecrypt;
     this.iEncrypt = iEncrypt;
-    this.clientKeyManager = new ClientKeyManager();
+    this.iClientManager = new ClientManager();
   }
 
   public void doOnStart() throws Exception {
-    // Crear ventana principal
     JFrame ventana = new JFrame("Menú de Encriptación / Desencriptación AES256");
     ventana.setSize(450, 300);
     ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     ventana.setLayout(null);
-    this.clientKeyManager.cargarClientes();
-
-    // Etiqueta para mostrar el menú
+    this.iClientManager.cargarClientes();
     JLabel menuLabel = new JLabel("<html>"
-            + "|------------------ Menú ------------------|<br>"
-            + "| 1. Encriptar texto                       <br>"
-            + "| 2. Desencriptar texto                    <br>"
-            + "| 3. Agregar nuevo cliente                  <br>"
-            + "| 4. Agregar/Actualizar llave               <br>"
-            + "| 5. Listar todos los clientes              <br>"
-            + "| 6. Salir                                 <br>"
+            + "|------------------ Menu ------------------|<br>"
+            + "| 1. Encrypt text                          <br>"
+            + "| 2. Decrypt text                          <br>"
+            + "| 3. Add Client                            <br>"
+            + "| 4. Add/Update key                        <br>"
+            + "| 5. List Clients                          <br>"
+            + "| 6. Exit                                  <br>"
             + "|------------------------------------------|</html>");
+
     menuLabel.setBounds(50, 10, 300, 100);
     ventana.add(menuLabel);
-
-    // Definir dimensiones comunes para los botones
     int buttonWidth = 120;
     int buttonHeight = 30;
 
     // Botones para opciones
-    JButton btnEncrypt = new JButton("1");
+    JButton btnEncrypt = new JButton("Encrypt");
     btnEncrypt.setBounds(20, 150, buttonWidth, buttonHeight);
-    btnEncrypt.setToolTipText("Encriptar texto"); // Título al pasar el mouse
+    btnEncrypt.setToolTipText("Encrypt"); // Título al pasar el mouse
     ventana.add(btnEncrypt);
 
-    JButton btnDecrypt = new JButton("2");
+    JButton btnDecrypt = new JButton("Decrypt");
     btnDecrypt.setBounds(150, 150, buttonWidth, buttonHeight);
-    btnDecrypt.setToolTipText("Desencriptar texto"); // Título al pasar el mouse
+    btnDecrypt.setToolTipText("Decrypt"); // Título al pasar el mouse
     ventana.add(btnDecrypt);
 
-    JButton btnAddClient = new JButton("3");
+    JButton btnAddClient = new JButton("Add Client");
     btnAddClient.setBounds(280, 150, buttonWidth, buttonHeight);
-    btnAddClient.setToolTipText("Agregar Cliente"); // Título al pasar el mouse
+    btnAddClient.setToolTipText("Add Client"); // Título al pasar el mouse
     ventana.add(btnAddClient);
 
-    JButton btnAddKey = new JButton("4");
+    JButton btnAddKey = new JButton("Add/Update key");
     btnAddKey.setBounds(20, 200, buttonWidth, buttonHeight);
-    btnAddKey.setToolTipText("Agregar/Actualizar Llave"); // Título al pasar el mouse
+    btnAddKey.setToolTipText("Add/Update key"); // Título al pasar el mouse
     ventana.add(btnAddKey);
 
-    JButton btnListClients = new JButton("5");
+    JButton btnListClients = new JButton("List Clients");
     btnListClients.setBounds(150, 200, buttonWidth, buttonHeight);
-    btnListClients.setToolTipText("Listar Clientes"); // Título al pasar el mouse
+    btnListClients.setToolTipText("List Clients"); // Título al pasar el mouse
     ventana.add(btnListClients);
 
-    JButton btnExit = new JButton("6");
+    JButton btnExit = new JButton("Exit");
     btnExit.setBounds(280, 200, buttonWidth, buttonHeight); // Centrado
-    btnExit.setToolTipText("Salir"); // Título al pasar el mouse
+    btnExit.setToolTipText("EXIT"); // Título al pasar el mouse
     ventana.add(btnExit);
 
     // Eventos para los botones
     btnEncrypt.addActionListener(e -> {
       try {
-        manejarOperacion("encriptar");
+        doOnBusinessAes256(Constants.BUSSINES_ENCRYPT);
       } catch (Exception ex) {
         throw new RuntimeException(ex);
       }
@@ -98,7 +95,7 @@ public class AESEncryptionFrame {
 
     btnDecrypt.addActionListener(e -> {
       try {
-        manejarOperacion("desencriptar");
+        doOnBusinessAes256(Constants.BUSSINES_DECRYPT);
       } catch (Exception ex) {
         throw new RuntimeException(ex);
       }
@@ -114,16 +111,15 @@ public class AESEncryptionFrame {
       JOptionPane.showMessageDialog(ventana, "Saliendo del programa...");
       System.exit(0);
     });
-
     ventana.setLocationRelativeTo(null);
     ventana.setVisible(true); // Mostrar la ventana
   }
 
   // Método para manejar la encriptación o desencriptación
-  private void manejarOperacion(String operation) throws Exception {
+  private void doOnBusinessAes256(int operation) throws Exception {
     String cliente, keyName, data;
 
-    String[] nombresClientes = this.clientKeyManager.clientes.stream()
+    String[] nombresClientes = this.iClientManager.doOnGetClients().stream()
             .map(Cliente::getNombre) // Obtener los nombres de los clientes
             .toArray(String[]::new); // Convertir a un array
 
@@ -132,7 +128,7 @@ public class AESEncryptionFrame {
     int seleccionClient = JOptionPane.showConfirmDialog(null, comboBoxClients, "Selecciona un cliente", JOptionPane.OK_CANCEL_OPTION);
     if (seleccionClient == JOptionPane.OK_OPTION) {
       cliente = (String) comboBoxClients.getSelectedItem();
-      Optional<Cliente> optionalClient = this.clientKeyManager.clientes.stream()
+      Optional<Cliente> optionalClient = this.iClientManager.doOnGetClients().stream()
               .filter(c -> c.getNombre().equals(cliente)) // Comparar el nombre
               .findFirst();
       String[] keysNames = optionalClient.get().getLlaves().stream()
@@ -150,21 +146,15 @@ public class AESEncryptionFrame {
 
 
         data = JOptionPane.showInputDialog("Ingresa el texto:");
-        if (operation.equals("encriptar")) {
+        if (operation == Constants.BUSSINES_ENCRYPT) {
           String encryptedData = iEncrypt.doOnEncrypt(data, optionalKey.get().getValue());
           JOptionPane.showMessageDialog(null, "Texto Encriptado:\n" + encryptedData);
-        } else {
+        } else if (operation == Constants.BUSSINES_DECRYPT) {
           String decryptedData = iDecrypt.doOnDecrypt(data, optionalKey.get().getValue());
           JOptionPane.showMessageDialog(null, "Texto Desencriptado:\n" + decryptedData);
         }
-      } else {
-        keyName = "";
       }
-    } else {
-      cliente = "";
     }
-
-
   }
 
   // Método para agregar un nuevo cliente
@@ -180,7 +170,7 @@ public class AESEncryptionFrame {
       // Agregar el nuevo cliente
       Cliente nuevoCliente = new Cliente(nombreCliente, new ArrayList<>());
 
-      JOptionPane.showMessageDialog(null, String.format("Cliente %s", clientKeyManager.agregarCliente(nuevoCliente) ? "agregado  exitosamente" : " ya existe"));
+      JOptionPane.showMessageDialog(null, String.format("Cliente %s", this.iClientManager.doOnAddCliente(nuevoCliente) ? "agregado  exitosamente" : " ya existe"));
     } catch (IOException e) {
       JOptionPane.showMessageDialog(null, "Error al agregar el cliente: " + e.getMessage());
     }
@@ -212,7 +202,7 @@ public class AESEncryptionFrame {
     try {
       // Agregar o actualizar la llave
       Llave nuevaLlave = new Llave(nombreLlave, valorLlave);
-      clientKeyManager.agregarOActualizarLlave(nombreCliente, nuevaLlave);
+      this.iClientManager.doOnSaveOrUpdateKey(nombreCliente, nuevaLlave);
       JOptionPane.showMessageDialog(null, "Llave agregada/actualizada exitosamente.");
     } catch (IOException e) {
       JOptionPane.showMessageDialog(null, "Error al agregar/actualizar la llave: " + e.getMessage());
@@ -222,7 +212,7 @@ public class AESEncryptionFrame {
   // Método para listar todos los clientes y sus llaves
   private void listarClientes() {
     try {
-      List<Cliente> clientes = clientKeyManager.cargarClientes();
+      List<Cliente> clientes = this.iClientManager.cargarClientes();
       ObjectMapper objectMapper = new ObjectMapper(); // Inicializar el ObjectMapper
       String jsonClientes;
 
