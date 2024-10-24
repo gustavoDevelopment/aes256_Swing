@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="aes256.novopayment.prototype.AppTest" time="0.007" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="aes256.novopayment.prototype.AppTest" time="0.006" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2023.1.6"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -20,7 +20,7 @@
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="21.0.2+13-58"/>
     <property name="os.arch" value="amd64"/>
-    <property name="visualvm.id" value="48935049305900"/>
+    <property name="visualvm.id" value="1669163138400"/>
     <property name="java.io.tmpdir" value="C:\Users\galopez\AppData\Local\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -32,7 +32,7 @@
     <property name="classworlds.conf" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.1.2.1\IntelliJ IDEA Community Edition 2023.1.2\plugins\maven\lib\maven3\bin\m2.conf"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="stdout.encoding" value="UTF-8"/>
-    <property name="java.library.path" value="C:\Users\galopez\.jdks\openjdk-21.0.2\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Eclipse Adoptium\jdk-17.0.12.7-hotspot\bin;C:\Program Files\Java\jdk1.8.0_351\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\apache-maven-3.8.1\bin;;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\Bitvise SSH Client;C:\Program Files\Go\bin;C:\Program Files\nodejs\;C:\Users\galopez\AppData\Local\Microsoft\WindowsApps;C:\Users\galopez\AppData\Local\Programs\Git\cmd;C:\Users\galopez\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\galopez\AppData\Local\GitHubDesktop\bin;C:\Users\galopez\AppData\Roaming\npm;C:\Users\galopez\go\bin;."/>
+    <property name="java.library.path" value="C:\Users\galopez\.jdks\openjdk-21.0.2\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files\Eclipse Adoptium\jdk-17.0.13.11-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Java\jdk1.8.0_351\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\apache-maven-3.8.1\bin;;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\Bitvise SSH Client;C:\Program Files\Go\bin;C:\Program Files\nodejs\;C:\Users\galopez\AppData\Local\Microsoft\WindowsApps;C:\Users\galopez\AppData\Local\Programs\Git\cmd;C:\Users\galopez\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\galopez\AppData\Local\GitHubDesktop\bin;C:\Users\galopez\AppData\Roaming\npm;C:\Users\galopez\go\bin;."/>
     <property name="jansi.passthrough" value="true"/>
     <property name="maven.conf" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.1.2.1\IntelliJ IDEA Community Edition 2023.1.2\plugins\maven\lib\maven3/conf"/>
     <property name="jdk.debug" value="release"/>
@@ -66,5 +66,5 @@
     <property name="sun.stdout.encoding" value="UTF-8"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="aes256.novopayment.prototype.AppTest" name="testApp" time="0.007"/>
+  <testcase classname="aes256.novopayment.prototype.AppTest" name="testApp" time="0.006"/>
 </testsuite>

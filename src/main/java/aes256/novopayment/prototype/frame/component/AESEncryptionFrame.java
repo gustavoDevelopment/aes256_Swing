@@ -156,10 +156,18 @@ public class AESEncryptionFrame {
         data = JOptionPane.showInputDialog("Ingresa el texto:");
         if (operation == Constants.BUSSINES_ENCRYPT) {
           String encryptedData = iEncrypt.doOnEncrypt(data, optionalKey.get().getValue());
-          JOptionPane.showMessageDialog(null, "Texto Encriptado:\n" + encryptedData);
+          JTextArea textArea = new JTextArea(encryptedData);
+          textArea.setEditable(false);
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          JOptionPane.showMessageDialog(null,textArea,"Texto Encriptado",JOptionPane.INFORMATION_MESSAGE);
         } else if (operation == Constants.BUSSINES_DECRYPT) {
           String decryptedData = iDecrypt.doOnDecrypt(data, optionalKey.get().getValue());
-          JOptionPane.showMessageDialog(null, "Texto Desencriptado:\n" + decryptedData);
+          JTextArea textArea = new JTextArea(decryptedData);
+          textArea.setEditable(false);
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          JOptionPane.showMessageDialog(null, textArea,"Texto Desencriptado",JOptionPane.INFORMATION_MESSAGE);
         }
       }
     }
